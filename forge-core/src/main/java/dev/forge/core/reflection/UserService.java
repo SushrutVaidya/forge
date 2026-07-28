@@ -1,4 +1,4 @@
-package src.main.java.dev.forge.core.reflection;
+package dev.forge.core.reflection;
 
 import src.main.java.dev.forge.core.annotation.Omnissiah;
 

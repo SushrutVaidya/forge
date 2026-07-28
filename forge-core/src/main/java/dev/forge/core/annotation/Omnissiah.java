@@ -1,4 +1,4 @@
-package src.main.java.dev.forge.core.annotation;
+package dev.forge.core.annotation;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 

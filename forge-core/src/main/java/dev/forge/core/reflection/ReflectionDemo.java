@@ -1,5 +1,5 @@
-package src.main.java.dev.forge.core.reflection;
-import src.main.java.dev.forge.core.annotation.Omnissiah;
+package dev.forge.core.reflection;
+import dev.forge.core.annotation.Omnissiah;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
