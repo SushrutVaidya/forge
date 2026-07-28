@@ -1,0 +1,11 @@
+package src.main.java.dev.forge.core.annotation;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+
+
+@Retention(RetentionPolicy.RUNTIME)
+public @interface  Omnissiah {
+    String value() default "";
+
+
+}
