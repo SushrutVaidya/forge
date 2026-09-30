@@ -2,6 +2,7 @@ package dev.forge.core.definition;
 
 import dev.forge.core.annotation.Inject;
 import dev.forge.core.annotation.Omnissiah;
+import dev.forge.core.annotation.Stereotypes;
 import dev.forge.core.exception.BeanDefinitionException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Modifier;
@@ -44,10 +45,10 @@ public final class BeanDefinition {
      */
     public static BeanDefinition fromComponent(Class<?> beanType) {
         Objects.requireNonNull(beanType, "beanType must not be null");
-        Omnissiah annotation = beanType.getAnnotation(Omnissiah.class);
+        Omnissiah annotation = Stereotypes.findOmnissiah(beanType);
         if (annotation == null) {
             throw new BeanDefinitionException(
-                    beanType.getName() + " is not annotated with @Omnissiah");
+                    beanType.getName() + " is not a component (no @Omnissiah, directly or via a stereotype)");
         }
         String explicitName = annotation.value();
         String beanName = explicitName.isBlank() ? defaultName(beanType) : explicitName;
