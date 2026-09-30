@@ -15,4 +15,16 @@
     <artifactId>forge-core</artifactId>
     <packaging>jar</packaging>
 
+    <name>Forge Core</name>
+    <description>Core runtime: component scanning, bean registry, dependency injection, application context and lifecycle.</description>
+
+    <dependencies>
+        <!-- Test-only. The framework itself has zero runtime dependencies by design. -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
 </project>
