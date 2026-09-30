@@ -12,15 +12,46 @@
   <packaging>pom</packaging>
 
   <name>Forge Framework</name>
+  <description>An AI-native Java framework: a lightweight inversion-of-control container built from first principles.</description>
 
   <modules>
     <module>forge-core</module>
   </modules>
 
   <properties>
-    <maven.compiler.source>21</maven.compiler.source>
-    <maven.compiler.target>21</maven.compiler.target>
+    <maven.compiler.release>21</maven.compiler.release>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+    <!-- Dependency versions: one authoritative place for the whole reactor. -->
+    <junit.version>5.11.4</junit.version>
+
+    <!-- Plugin versions: pinned for reproducible builds. -->
+    <maven-surefire-plugin.version>3.5.4</maven-surefire-plugin.version>
   </properties>
+
+  <dependencyManagement>
+    <dependencies>
+      <!-- The JUnit BOM aligns every junit-* artifact to a single, consistent version. -->
+      <dependency>
+        <groupId>org.junit</groupId>
+        <artifactId>junit-bom</artifactId>
+        <version>${junit.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <version>${maven-surefire-plugin.version}</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
 
 </project>
