@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
 
 /**
@@ -27,6 +28,13 @@ public final class BeanRegistry {
 
     private final Map<String, BeanDefinition> definitionsByName = new ConcurrentHashMap<>();
     private final Map<String, Object> singletonsByName = new ConcurrentHashMap<>();
+
+    /**
+     * Names of singletons in the order they were created. Drives lifecycle
+     * ordering: {@code @PostConstruct} runs in this order (dependencies first),
+     * {@code @PreDestroy} in reverse.
+     */
+    private final List<String> singletonCreationOrder = new CopyOnWriteArrayList<>();
 
     /**
      * Registers a bean definition.
@@ -110,6 +118,7 @@ public final class BeanRegistry {
         if (existing != null) {
             throw new BeanDefinitionException("A singleton named '" + name + "' is already registered");
         }
+        singletonCreationOrder.add(name);
     }
 
     /** @return the cached singleton, or {@code null} if none has been created yet */
@@ -121,8 +130,14 @@ public final class BeanRegistry {
         return singletonsByName.containsKey(name);
     }
 
-    /** Clears the singleton cache. Definitions are retained. */
+    /** @return singleton names in creation order (dependencies before dependents); immutable, never null */
+    public List<String> getSingletonNamesInCreationOrder() {
+        return List.copyOf(singletonCreationOrder);
+    }
+
+    /** Clears the singleton cache and its creation order. Definitions are retained. */
     public void clearSingletons() {
         singletonsByName.clear();
+        singletonCreationOrder.clear();
     }
 }
