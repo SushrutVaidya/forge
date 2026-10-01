@@ -16,6 +16,7 @@
 
   <modules>
     <module>forge-core</module>
+    <module>forge-example</module>
   </modules>
 
   <properties>
