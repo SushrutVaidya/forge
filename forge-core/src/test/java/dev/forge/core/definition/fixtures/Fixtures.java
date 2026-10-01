@@ -74,4 +74,12 @@ public final class Fixtures {
 
     @Omnissiah
     public static class OrderRepository implements Repository {}
+
+    // Non-instantiable kinds, for requireInstantiable coverage.
+    public enum Color { RED, GREEN }
+
+    public @interface Marker {}
+
+    /** A non-static inner class — the container cannot instantiate it. */
+    public class NonStaticInner {}
 }

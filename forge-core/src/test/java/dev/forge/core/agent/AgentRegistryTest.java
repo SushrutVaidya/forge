@@ -8,8 +8,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import dev.forge.core.agent.app.MyAgent;
 import dev.forge.core.agent.app.PlainBean;
+import dev.forge.core.agent.multi.Assistant;
 import dev.forge.core.context.ApplicationContext;
 import dev.forge.core.exception.NoSuchBeanException;
+import dev.forge.core.exception.NoUniqueBeanException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -53,6 +55,26 @@ class AgentRegistryTest {
         try (ApplicationContext context = ApplicationContext.run(APP)) {
             AgentRegistry registry = AgentRegistry.fromContext(context);
             assertThrows(UnsupportedOperationException.class, () -> registry.getAgents().add("x"));
+        }
+    }
+
+    @Test
+    @DisplayName("a context with no agents yields an empty registry")
+    void emptyWhenNoAgents() {
+        try (ApplicationContext context = ApplicationContext.run("dev.forge.core.agent.noagents")) {
+            AgentRegistry registry = AgentRegistry.fromContext(context);
+            assertTrue(registry.isEmpty());
+            assertEquals(0, registry.count());
+        }
+    }
+
+    @Test
+    @DisplayName("an ambiguous agent type fails fast")
+    void ambiguousAgentType() {
+        try (ApplicationContext context = ApplicationContext.run("dev.forge.core.agent.multi")) {
+            AgentRegistry registry = AgentRegistry.fromContext(context);
+            assertEquals(2, registry.count());
+            assertThrows(NoUniqueBeanException.class, () -> registry.getAgent(Assistant.class));
         }
     }
 }

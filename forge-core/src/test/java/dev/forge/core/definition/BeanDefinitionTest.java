@@ -1,7 +1,9 @@
 package dev.forge.core.definition;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import dev.forge.core.definition.fixtures.Fixtures;
 import dev.forge.core.exception.BeanDefinitionException;
@@ -94,6 +96,28 @@ class BeanDefinitionTest {
         }
 
         @Test
+        @DisplayName("rejects enums, annotations, arrays and primitives")
+        void rejectsNonConcreteKinds() {
+            assertThrows(BeanDefinitionException.class, () -> BeanDefinition.of(Fixtures.Color.class, "x"));
+            assertThrows(BeanDefinitionException.class, () -> BeanDefinition.of(Fixtures.Marker.class, "x"));
+            assertThrows(BeanDefinitionException.class, () -> BeanDefinition.of(String[].class, "x"));
+            assertThrows(BeanDefinitionException.class, () -> BeanDefinition.of(int.class, "x"));
+        }
+
+        @Test
+        @DisplayName("rejects a non-static inner class")
+        void rejectsNonStaticInner() {
+            assertThrows(BeanDefinitionException.class,
+                    () -> BeanDefinition.of(Fixtures.NonStaticInner.class, "x"));
+        }
+
+        @Test
+        @DisplayName("rejects a null bean type")
+        void rejectsNullType() {
+            assertThrows(NullPointerException.class, () -> BeanDefinition.of(null, "x"));
+        }
+
+        @Test
         @DisplayName("rejects a blank bean name")
         void rejectsBlankName() {
             assertThrows(BeanDefinitionException.class,
@@ -125,7 +149,24 @@ class BeanDefinitionTest {
             BeanDefinition a = BeanDefinition.fromComponent(Fixtures.SimpleService.class);
             BeanDefinition b = BeanDefinition.fromComponent(Fixtures.SimpleService.class);
             assertEquals(a, b);
+            assertEquals(a, a);
             assertEquals(a.hashCode(), b.hashCode());
+        }
+
+        @Test
+        @DisplayName("not equal to a different bean, null, or an unrelated object")
+        void inequality() {
+            BeanDefinition a = BeanDefinition.fromComponent(Fixtures.SimpleService.class);
+            assertNotEquals(a, BeanDefinition.fromComponent(Fixtures.NamedService.class));
+            assertNotEquals(a, null);
+            assertNotEquals(a, "not a definition");
+        }
+
+        @Test
+        @DisplayName("toString names the bean and its type")
+        void string() {
+            String s = BeanDefinition.fromComponent(Fixtures.SimpleService.class).toString();
+            assertTrue(s.contains("simpleService"), s);
         }
     }
 }

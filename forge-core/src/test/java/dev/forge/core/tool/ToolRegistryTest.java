@@ -122,5 +122,13 @@ class ToolRegistryTest {
         void parameterTypes() {
             assertEquals(List.of(int.class, int.class), calculatorRegistry().getTool("add").parameterTypes());
         }
+
+        @Test
+        @DisplayName("ToolMetadata.of rejects a method that is not annotated with @Tool")
+        void rejectsNonToolMethod() throws Exception {
+            var method = ToolFixtures.Calculator.class.getDeclaredMethod("notATool");
+            assertThrows(IllegalArgumentException.class,
+                    () -> ToolMetadata.of(new ToolFixtures.Calculator(), method));
+        }
     }
 }
