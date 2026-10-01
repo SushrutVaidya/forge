@@ -20,6 +20,8 @@
 
   <properties>
     <maven.compiler.release>21</maven.compiler.release>
+    <!-- Retain method parameter names in bytecode so tool schemas can use them. -->
+    <maven.compiler.parameters>true</maven.compiler.parameters>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
     <!-- Dependency versions: one authoritative place for the whole reactor. -->

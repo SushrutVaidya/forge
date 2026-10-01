@@ -4,6 +4,8 @@ import dev.forge.core.annotation.Tool;
 import dev.forge.core.exception.ToolExecutionException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -56,6 +58,18 @@ public final class ToolMetadata {
     /** @return the tool's parameter types, in order; never {@code null}, immutable */
     public List<Class<?>> parameterTypes() {
         return parameterTypes;
+    }
+
+    /**
+     * @return a machine-readable schema of this tool (name, description, and
+     *         parameters with their JSON types), suitable for handing to an LLM
+     */
+    public ToolSchema schema() {
+        List<ToolParameter> parameters = new ArrayList<>();
+        for (Parameter parameter : method.getParameters()) {
+            parameters.add(new ToolParameter(parameter.getName(), JsonTypes.forJavaType(parameter.getType())));
+        }
+        return new ToolSchema(name, description, parameters);
     }
 
     /**
