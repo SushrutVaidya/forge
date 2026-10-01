@@ -1,6 +1,7 @@
 package dev.forge.core.scanner;
 
 import dev.forge.core.annotation.Omnissiah;
+import dev.forge.core.annotation.Stereotypes;
 import dev.forge.core.exception.ForgeScannerException;
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -125,7 +126,7 @@ public final class ForgeScanner {
                 } else if (isComponentCandidate(fileName)) {
                     String className = packageName + "." + fileName.substring(0, fileName.length() - CLASS_EXTENSION.length());
                     Class<?> candidate = loadClass(className);
-                    if (candidate.isAnnotationPresent(Omnissiah.class)) {
+                    if (Stereotypes.isComponent(candidate)) {
                         components.add(candidate);
                     }
                 }
