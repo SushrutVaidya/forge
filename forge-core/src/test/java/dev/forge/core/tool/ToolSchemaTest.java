@@ -82,4 +82,12 @@ class ToolSchemaTest {
         List<ToolSchema> schemas = ToolRegistry.fromBeans(List.of(new ToolFixtures.Typed())).schemas();
         assertEquals(2, schemas.size());
     }
+
+    @Test
+    @DisplayName("a null description becomes empty")
+    void nullDescription() {
+        ToolSchema schema = new ToolSchema("t", null, List.of());
+        assertEquals("", schema.description());
+        assertTrue(schema.toString().contains("t"));
+    }
 }

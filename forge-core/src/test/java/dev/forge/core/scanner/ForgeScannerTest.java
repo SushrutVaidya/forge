@@ -111,6 +111,17 @@ class ForgeScannerTest {
             Set<Class<?>> found = Set.copyOf(new ForgeScanner().scan(FIXTURES));
             assertTrue(found.contains(AlphaComponent.class));
         }
+
+        @Test
+        @DisplayName("skips package-info/module-info class files")
+        void skipsPackageInfo() {
+            // The package contains a package-info.class; the scanner must skip it
+            // (loading "...package-info" would throw) and return only the component.
+            Set<String> names = scanner.scan("dev.forge.core.scanner.pkginfo").stream()
+                    .map(Class::getSimpleName)
+                    .collect(Collectors.toSet());
+            assertEquals(Set.of("PkgComponent"), names);
+        }
     }
 
     @Nested

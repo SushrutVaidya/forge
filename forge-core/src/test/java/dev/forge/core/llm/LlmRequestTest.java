@@ -1,6 +1,7 @@
 package dev.forge.core.llm;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.DisplayName;
@@ -47,5 +48,17 @@ class LlmRequestTest {
     void equality() {
         assertEquals(LlmRequest.of("s", "u"), LlmRequest.of("s", "u"));
         assertEquals(LlmRequest.of("s", "u").hashCode(), LlmRequest.of("s", "u").hashCode());
+        LlmRequest r = LlmRequest.of("s", "u");
+        assertEquals(r, r);
+    }
+
+    @Test
+    @DisplayName("not equal when a field differs, or against null/other types")
+    void inequality() {
+        LlmRequest r = LlmRequest.of("s", "u");
+        assertNotEquals(r, LlmRequest.of("other", "u"));
+        assertNotEquals(r, LlmRequest.of("s", "different"));
+        assertNotEquals(r, null);
+        assertNotEquals(r, "not a request");
     }
 }
