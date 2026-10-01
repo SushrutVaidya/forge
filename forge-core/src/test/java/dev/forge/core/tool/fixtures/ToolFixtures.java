@@ -35,4 +35,12 @@ public final class ToolFixtures {
         @Tool(name = "dup")
         void b() {}
     }
+
+    public static class Typed {
+        @Tool(description = "exercises the type mapping")
+        void act(String text, int count, boolean flag, double ratio) {}
+
+        @Tool
+        void noArgs() {}
+    }
 }

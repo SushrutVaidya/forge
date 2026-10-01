@@ -83,6 +83,14 @@ public final class ToolRegistry {
     }
 
     /**
+     * @return a schema for every tool, suitable for handing to an LLM so it can
+     *         choose and call them; immutable, never null
+     */
+    public List<ToolSchema> schemas() {
+        return toolsByName.values().stream().map(ToolMetadata::schema).toList();
+    }
+
+    /**
      * Invokes a tool by name.
      *
      * @throws NoSuchToolException if the tool is unknown
